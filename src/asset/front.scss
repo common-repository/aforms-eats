@@ -1,0 +1,1642 @@
+
+
+$font-size: 16px !default;
+$small-font-size: 14px !default;
+$nano-font-size: 10px !default;
+$big-font-size: 20px !default;
+$line-height: 1.5 !default;
+$narrow-line-height: 1.3 !default;
+$padding: 10px !default;
+$narrow-padding: 4px !default;
+$control-height: 40px !default;
+$navbar-height: 60px !default;
+$fab-size: 80px !default;
+$monitor-width: 350px !default;
+$monitor-gap: 20px !default;
+$monitor-max-height: 80vh !default;
+$picture-width: 292px !default;
+$picture-height: 250px !default;
+$max-form-width: 600px !default;
+$rejection-shift: 0.25em !default;
+$icon-size: 30px !default;
+$base-color: rgb(17, 17, 17) !default;
+$base-bgcolor: rgb(255, 255, 255) !default;
+$alt-bgcolor: rgb(240, 240, 240) !default;
+$primary-color: rgb(235, 65, 102) !default;
+$negative-color: rgb(221, 68, 34) !default;
+$primary-button-bgcolor: $primary-color !default;
+$dark-base: false !default;
+
+$border-color: rgba($base-color, 0.26) !default;
+$button-border-color: rgba($base-color, 0.13) !default;
+$placeholder-color: rgba($base-color, 0.35) !default;
+$button-bgcolor: mix(scale-color($base-bgcolor, $lightness:-20%, $saturation:-20%), $primary-color, 95%) !default;
+$primary-bgcolor: scale-color($primary-color, $lightness:40%, $saturation:-25%) !default;
+$hover-button-bgcolor: scale-color($button-bgcolor, $lightness:-15%, $saturation:-10%) !default;
+$hover-primary-button-bgcolor: scale-color($primary-button-bgcolor, $lightness:-15%, $saturation:-10%) !default;
+@if $dark-base {
+    $button-bgcolor: mix(scale-color($base-bgcolor, $lightness:20%, $saturation:-20%), $primary-color, 95%) !default;
+    $primary-bgcolor: scale-color($primary-color, $lightness:-40%, $saturation:-25%) !default;
+    $hover-button-bgcolor: scale-color($button-bgcolor, $lightness:15%, $saturation:-10%) !default;
+    $hover-primary-button-bgcolor: scale-color($primary-button-bgcolor, $lightness:15%, $saturation:-10%) !default;
+}
+
+$outline-width: 4px !default;
+$hover-alpha: 0.2 !default;
+$focus-alpha: 0.4 !default;
+$weak-alpha: 0.6 !default;
+$disabled-alpha: 0.3 !default;
+$break-width: 782px !default;
+$box-radius: 0 !default;
+$raise-button: false !default;
+$shadow1:0 1px 3px rgba(0,0,0, 0.12), 0 1px 2px rgba(#000, 0.24);
+$shadow2:0 3px 6px rgba(0,0,0, 0.2);
+$disable-selection-anim: false !default;
+$disable-focus-anim: false !default;
+$plain-components: false !default;
+$control-header-width: 10em !default;
+$form-padding: 0 !default;
+$show-optional: false !default;
+$flip-required: false !default;
+$fill-required: false !default;
+$table-layout: false !default;
+
+/*
+ * padding for controls
+ */
+@function cpd($borderWidth) {
+    @return (($control-height - $font-size * $line-height - 2 * $borderWidth) / 2);
+}
+
+$scroll-indicator-width: (cpd(1) + 0.5 * $font-size) * 3;
+
+
+/*
+ * This class is added to body when a modal dialog is displayed.
+ */
+.wqe-x-suspended, 
+.wqe-x-suspended body {
+    overflow: hidden;
+}
+
+%Component {
+    display: block;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    height: auto;
+    box-sizing: border-box;
+    font-size: $font-size;
+}
+
+%Container {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
+%Item {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $border-color;
+    & > .wqe--head {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: $padding;
+        border-bottom: 1px solid $border-color;
+        background-color: $alt-bgcolor;
+        position: relative;
+        font-size: $font-size;
+        color: $base-color;
+        & > .wqe--media {
+            width: $icon-size;
+            height: $icon-size;
+            @extend %Container;
+        }
+        & > .wqe--main {
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 1;
+            flex-grow: 1;
+            flex-basis: auto;
+            width: 100%;
+            & > .wqe--note {
+                font-size: $small-font-size;
+                color: rgba($base-color, $weak-alpha);
+                line-height: $narrow-line-height;
+            }
+        }
+        & > .wqe--message {
+            @extend %Message;
+            top: $padding;
+            right: $padding;
+            position: absolute;
+            background: transparent;
+        }
+    }
+    &.wqe-is-invalid {
+        border-color: $negative-color;
+    }
+    &.wqe-belongs-hnavigator {
+    }
+    &.wqe-belongs-wnavigator {
+        height: 100%;
+        overflow: auto;
+        position:relative;
+        width: 100%;
+        & > .wqe--head {
+            flex: 0 0 auto;
+        }
+    }
+}
+
+%TextInput {
+    display: block;
+    border: 1px solid $border-color;
+    background: $base-bgcolor;
+    color: $base-color;
+    padding: cpd(1) cpd(1);
+    height: auto;
+    margin: 0;
+    box-sizing: border-box;
+    outline: none;
+    border-radius: $box-radius;
+    line-height: $line-height;
+    max-width: 100%;
+    position: relative;
+    font-size: $font-size;
+    transition: box-shadow 0.1s linear, border-color 0.1s linear;
+    &:hover {
+        @media screen and (min-width:$break-width + 1) {
+            box-shadow: 0 0 0 $outline-width rgba($primary-color, $hover-alpha);
+            z-index: 2;
+        }
+    }
+    &:focus {
+        box-shadow: 0 0 0 $outline-width rgba($primary-color, $focus-alpha);
+        border: 1px solid $border-color;
+        outline: none;
+        z-index: 2;
+        @if $disable-focus_anim == false {
+            animation: explosion 0.6s;
+        }
+    }
+    &.wqe-is-invalid:not(:focus) {
+        border-color: $negative-color;
+    }
+    &::placeholder {
+        font-size: $font-size;
+        color: $placeholder-color;
+    }
+    &:-ms-input-placeholder {
+        font-size: $font-size;
+        color: $placeholder-color;
+    }
+    &::-ms-input-placeholder {
+        font-size: $font-size;
+        color: $placeholder-color;
+    }
+}
+@keyframes explosion {
+    0% {box-shadow:0 0 0 $outline-width rgba($primary-color, $hover-alpha), 0 0 0 0 rgba($primary-color, $hover-alpha);}
+    15% {box-shadow:0 0 0 $outline-width rgba($primary-color, $hover-alpha * 0.5 + $focus-alpha * 0.5), 0 0 6px 10px rgba($primary-color, $hover-alpha);}
+    30% {box-shadow:0 0 0 $outline-width rgba($primary-color, $focus-alpha), 0 0 8px 17px rgba($primary-color, $hover-alpha * 0.5);}
+    100% {box-shadow:0 0 0 $outline-width rgba($primary-color, $focus-alpha), 0 0 12px 25px rgba($primary-color, 0);}
+}
+
+%Checkable {
+    display: block;
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    outline: none;
+    line-height: $line-height;
+    max-width: 100%;
+    color: $base-color;
+    & > input {
+        display:block;
+        position: absolute;
+        opacity: 0;
+    }
+    & > label {
+        display:block;
+        background: $base-bgcolor;
+        height: $control-height;
+        line-height: $control-height;
+        @if $plain-components {
+            padding: 0 cpd(0) 0 0;
+            border-width: 0;
+            box-shadow: 0 0 0 $outline-width transparent;
+            border-radius: $box-radius;
+        } @else {
+            padding: 0 cpd(1) + (0.5 * $font-size) 0 cpd(1);
+            border: 1px solid $border-color;
+            border-radius: 100px;
+        }
+        position: relative;
+        max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        margin: 0;
+        transition: box-shadow 0.1s linear, border-color 0.1s linear;
+    }
+    @if $plain-components {
+        & > input.wqe-is-invalid + label {
+            color: $negative-color;
+        }
+    } @else {
+        & > input.wqe-is-invalid + label {
+            border-color: $negative-color;
+            z-index: 2;
+        }
+    }
+    & > label:hover {
+        @media screen and (min-width:$break-width + 1) {
+            box-shadow: 0 0 0 $outline-width rgba($primary-color, $hover-alpha);
+        }
+    }
+    & > input:focus + label {
+        box-shadow: 0 0 0 $outline-width rgba($primary-color, $focus-alpha);
+        z-index: 2;
+    }
+}
+
+%Message {
+    display: block;
+    color: $negative-color;
+    //background: rgba(255, 255, 255, 0.85);
+    font-size: $small-font-size;
+    line-height: 1;
+    font-weight: normal;
+    width: auto;
+    margin-top: 0 !important;
+    max-width: 100%;
+    &::before {
+        display: inline-block;
+        font-family:"dashicons";
+        content: "\f534 ";
+        vertical-align: -2px;
+        margin-right: 1px;
+    }
+    &.wqe-is-run.wqe-for-removed {
+        transition: opacity 0.2s linear;
+    }
+    &.wqe-is-removed {
+        opacity: 0;
+    }
+    &.wqe-is-run.wqe-for-created {
+        animation-iteration-count: 1;
+        animation: rejection 0.3s;
+    }
+}
+@keyframes rejection {
+    0% {transform: translateX($rejection-shift);}
+    15% {transform: translateX(-1 * $rejection-shift);}
+    30% {transform: translateX(0.5 * $rejection-shift);}
+    50% {transform: translateX(-0.5 * $rejection-shift);}
+    70% {transform: translateX(0.25 * $rejection-shift);}
+    90% {transform: translateX(-0.25 * $rejection-shift);}
+}
+
+%Buttonlike {
+    display: block;
+    border: 1px solid $button-border-color;
+    background-color: $button-bgcolor !important;
+    padding: cpd(1) cpd(1) + (0.5 * $font-size);
+    margin: 0;
+    box-sizing: border-box;
+    outline: none;
+    line-height: $line-height;
+    max-width: 100%;
+    background-clip: border-box;
+    font-size: $font-size;
+    font-weight: normal;
+    border-radius: $box-radius;
+    outline: none;
+    color: inherit !important;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+    transition: box-shadow 0.1s linear, background-color 0.1s linear, opacity 0.1s linear;
+    @if $raise-button {
+        box-shadow: $shadow1;
+    }
+    &:disabled {
+        opacity: $disabled-alpha;
+        pointer-events: none;
+    }
+    &:hover {
+        text-decoration:none;
+        @media screen and (min-width:$break-width + 1) {
+            background-color: $hover-button-bgcolor !important;
+        }
+    }
+    &:focus {
+        @if $raise-button {
+            box-shadow: 0 0 0 4px rgba($primary-color, $focus-alpha), $shadow1;
+        } @else {
+            box-shadow: 0 0 0 4px rgba($primary-color, $focus-alpha);
+        }
+        background-color: $button-bgcolor !important;
+        text-decoration:none;
+        outline: none;
+        z-index: 2;
+    }
+    &:active {
+        background-color: $hover-button-bgcolor !important;
+        text-decoration:none;
+    }
+}
+
+
+
+
+.wqe-Form .wqe-Image {
+    @extend %Component;
+    background-repeat: no-repeat;
+    background-position: center center;
+    overflow: hidden;
+    &.wqe-scaling-center {
+        background-image: none !important;
+        position: relative;
+        & > .wqe--img {
+            display: block;
+            position: relative;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            min-width:1px;
+            min-height:1px;
+            border: none;
+        }
+    }
+    &.wqe-scaling-cover {
+        background-size: cover;
+        & > .wqe--img {
+            display: block;
+            opacity: 0;
+            pointer-events: none;
+        }
+    }
+    &.wqe-scaling-contain {
+        background-size: contain;
+        & > .wqe--img {
+            display: block;
+            opacity: 0;
+            pointer-events: none;
+        }
+    }
+    &.wqe-belongs-product {
+        width: $picture-width;
+        height: $picture-height;
+        background-size: cover;
+        & > .wqe--img {
+            display: block;
+            opacity: 0;
+            pointer-events: none;
+        }
+    }
+    &.wqe-belongs-selector {
+        width: $icon-size;
+        height: $icon-size;
+    }
+}
+
+@mixin ribbonOblique() {
+    display: inline-block;
+    position: absolute;
+    left: -30px; // 10 + 60 + x = 40 
+    top: 21px;  // 10 + 9 + y = 40 
+    width: 120px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    height: 18px;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    background-color: rgb(21, 21, 90);
+    color: white;
+}
+
+@mixin ribbonSeal($off) {
+    display: block;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 11px;
+    text-align: center;
+    background: red;
+    color: yellow;
+    border-radius: 100px;
+    top: 250px - 4px - 40px;
+    right: 4px + $off * 40px;
+}
+
+.wqe-Form .wqe-Product {
+    @extend %Component;
+    @extend %Container;
+    position: relative;
+    width: $picture-width + 2 * $narrow-padding;
+    box-sizing: border-box;
+    justify-content: center;
+    //overflow: hidden;
+    align-self: stretch;
+    flex-direction: column;
+    padding: $narrow-padding;
+    transition: background-color 0.2s linear;
+    & > .wqe--info {
+        @extend %Component;
+        display: flex;
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: auto;
+        flex-direction: column;
+        position: relative;
+        max-width: 100%;
+        box-sizing: border-box;
+        width: 100%;
+        overflow: hidden;
+        & > .wqe--media {
+            @extend %Container;
+            justify-content: center;
+            flex: 0 0 auto;
+        }
+        & > .wqe--main {
+            @extend %Container;
+            flex-direction: row;
+            text-align: center;
+            flex: 1 1 auto;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            flex-wrap: wrap;
+            padding: $narrow-padding;
+            justify-content: space-between;
+            & > .wqe--name {
+                flex: 0 0 auto;
+                flex-grow: 0;
+                flex-shrink: 0;
+                flex-basis: auto;
+                max-width: 100%;
+                order: 1;
+            }
+            & > .wqe--note {
+                font-size: $small-font-size;
+                color: rgba($base-color, $weak-alpha);
+                line-height: $narrow-line-height;
+                max-width: 100%;
+                width: 100%;
+                order: 3;
+            }
+            & > .wqe--prices {
+                max-width: 100%;
+                flex-grow: 0;
+                flex-shrink: 0;
+                flex-basis: auto;
+                order: 2;
+                & > .wqe--normalPrice {
+                    text-decoration: line-through;
+                }
+                & > .wqe--price {
+                    font-size: $font-size;
+                    font-weight: bold;
+                }
+            }
+        }
+        & > .wqe--ribbon.wqe-ribbon-1 { @include ribbonSeal(0); }
+        & > .wqe--ribbon.wqe-ribbon-2 { @include ribbonOblique(); }
+        & > .wqe--ribbon.wqe-ribbon-3 { @include ribbonSeal(1); }
+        & > .wqe--ribbon.wqe-ribbon-disabled {
+            position: absolute;
+            display: block;
+            border: 1px solid $negative-color;
+            background-color: $base-bgcolor;
+            color: $negative-color;
+            line-height: $control-height;
+            height: $control-height;
+            padding: 0 $padding;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+    & > .wqe--control {
+        & > .wqe--quantity {
+            display:none;
+        }
+    }
+    &.wqe-is-selected {
+        background-color: $primary-bgcolor;
+    }
+    &.wqe-is-disabled {
+        .wqe--media, 
+        .wqe--main, 
+        .wqe--ribbon:not(.wqe-ribbon-disabled) {
+            opacity: $disabled-alpha;
+        }
+    }
+}
+
+.wqe-Form .wqe-Group {
+    @extend %Item;
+    box-sizing: border-box;
+    border: none;
+    & > .wqe--head {
+        display: none;
+    }
+    & > .wqe--body {
+        @extend %Container;
+        flex-direction: row;
+        flex-wrap: wrap;
+        & > .wqe--note {
+            font-size: $font-size;
+            color: $base-color;
+            flex: 1 1 100%;
+            width: 100%;
+            margin-bottom: $padding;
+            box-sizing: border-box;
+        }
+    }
+    &.wqe-is-run {
+        transition: opacity 0.2s linear;
+        &.wqe-for-removed {
+            position: absolute;
+        }
+    }
+    &.wqe-is-created {
+        opacity: 0;
+    }
+    &.wqe-is-removed {
+        opacity: 0;
+        position: absolute;
+    }
+}
+
+.wqe-Form .wqe-NavBar {
+    &.wqe-belongs-hnavigator {
+        display: flex;
+        background: $alt-bgcolor;
+        border: 1px solid $border-color;
+        width: 100%;
+        z-index: 100;
+        position: relative;
+        box-shadow: $shadow2;
+        &.wqe-sticks-top {position:absolute; top:0; bottom:auto;}
+        &.wqe-sticks-bottom {position:absolute; top:auto; bottom:0;}
+        &.wqe-sticks-screen {position:fixed; top:0; bottom:auto;}
+        & > .wqe--menuWrap {
+            white-space: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            flex-grow: 1;
+            flex-shrink: 1;
+            flex-basis: auto;
+            & > .wqe--menu {
+                display: flex;
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                width: auto;
+                & > .wqe--item {
+                    position: relative;
+                    margin: 0;
+                    padding: 0;
+                    display: block;
+                    & > a {
+                        outline: none;
+                        text-decoration: none;
+                        color: $base-color;
+                        font-size: $font-size;
+                        display: flex;
+                        padding: 0 cpd(1) + (0.5 * $font-size);
+                        justify-content: center;
+                        background-color: transparent;
+                        transition: background-color 0.2s linear;
+                        &:hover {
+                            @media screen and (min-width:$break-width + 1) {
+                                background-color: $hover-button-bgcolor;
+                            }
+                        }
+                        & > .wqe--media {display: none;}
+                        & > .wqe--main {
+                            pointer-events: none;
+                            & > .wqe--name {
+                                height: $navbar-height;
+                                line-height: $navbar-height;
+                            }
+                            & > .wqe--note {display:none;}
+                        }
+                    }
+                    &::after {
+                        display: block;
+                        content: "";
+                        position: absolute;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        height: $outline-width;
+                        background-color: transparent;
+                        transition: background-color 0.2s linear;
+                    }
+                    &.wqe-is-current {
+                        &::after {
+                            background-color: $primary-color;
+                        }
+                    }
+                }
+                &::after {
+                    display: block;
+                    content: "";
+                    flex-grow: 0;
+                    flex-shrink: 0;
+                    flex-basis: $scroll-indicator-width;
+                    width: $scroll-indicator-width;
+                    box-sizing: border-box;
+                    height: 1px;
+                }
+            }
+        }
+        &::after {
+            content: "";
+            display: block;
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: $scroll-indicator-width;
+            background: linear-gradient(to left, #{rgba($alt-bgcolor, 1)}, #{rgba($alt-bgcolor, 0.5)} 75%, #{rgba($alt-bgcolor, 0)} 100%);
+            pointer-events: none;
+            @media screen and (max-width:$break-width) {
+                right: $fab-size * 0.85;
+            }
+        }
+        & > .wqe--commands {
+            display: none;
+            padding: 0;
+            width: $fab-size * 0.85;
+            flex-grow: 0;
+            flex-shrink: 0;
+            flex-basis: auto;
+            position: relative;
+            @media screen and (max-width:$break-width) {
+                display: block;
+            }
+        }
+    }
+}
+
+.wqe-Form .wqe-Monitor {
+    font-size: $font-size;
+    color: $base-color;
+    display: flex;
+    flex-direction: column;
+    &:not(.wqe-is-confirming) {
+        width: $monitor-width;
+        z-index: 200;
+        transform: translate($monitor-gap, 0);
+        box-shadow: $shadow2;
+        max-height: $monitor-max-height;
+        &.wqe-sticks-top {position:absolute; top:0; bottom:auto;}
+        &.wqe-sticks-bottom {position:absolute; top:auto; bottom:0;}
+        &.wqe-sticks-screen {position:fixed; top:0; bottom:auto;}
+        & > .wqe--header {
+            display: flex;
+            background-color: $base-bgcolor;
+            border: 1px solid $border-color;
+            & > .wqe--title {
+                flex-grow: 1;
+                flex-shrink: 1;
+                flex-basis: auto;
+                font-size: $font-size;
+                font-weight: bold;
+                color: $base-color;
+                padding: 0 $padding;
+                height: $control-height;
+                line-height: $control-height;
+            }
+            & > .wqe--menu {
+                flex-grow: 0;
+                flex-shrink: 0;
+                flex-basis: auto;
+                > .wqe-for-hidemonitor {display:none;}
+            }
+        }
+        & > .wqe--entries {
+            border: 1px solid $border-color;
+            //max-height: 80vh;
+            overflow: auto;
+            background: $base-bgcolor;
+            & > .wqe--entry.wqe-for-header {display:none;}
+        }
+        & > .wqe--entries > .wqe--entry {
+            display: flex;
+            align-items: center;
+            position: relative;
+            flex-wrap: wrap;
+            /*width: 100%;*/
+            &.wqe-for-header {
+                border-bottom: 1px solid $border-color;
+            }
+            &:nth-child(even) {
+                background: $alt-bgcolor;
+            }
+            & > .wqe--prop {
+                padding: $padding;
+                box-sizing: border-box;
+            }
+            & > .wqe-for-no {
+                display: none;
+            }
+            & > .wqe-for-entry {
+                flex: 1 1 40%;
+            }
+            & > .wqe-for-unitPrice {
+                display: none;
+            }
+            & > .wqe-for-taxClass {
+                display: none;
+            }
+            & > .wqe-for-quantity {
+                text-align: center;
+                flex-grow: 0;
+                flex-shrink: 0;
+                flex-basis: $control-height;
+                width: $control-height;
+            }
+            & > .wqe-for-price {
+                display: none;
+            }
+            & > .wqe-for-operation {
+                flex-grow: 0;
+                flex-shrink: 0;
+                flex-basis: auto;
+                box-sizing: border-box;
+                width: 2 * $control-height + $outline-width + 2 * $padding;
+                display: flex;
+                & > *:first-child {
+                    margin-right: $outline-width;
+                }
+            }
+            &.wqe-is-run {
+                transition: max-height 0.2s linear, opacity 0.2s linear;
+                max-height: 100px;
+                overflow: hidden;
+            }
+            &.wqe-is-created, &.wqe-is-removed {
+                max-height: 0;
+                opacity: 0;
+            }
+        }
+        & > .wqe--footer {
+            //max-width: 18em;
+            background: $base-bgcolor;
+            & > .wqe--entry {
+                border: 1px solid $border-color;
+                display: flex;
+                align-items: center;
+                font-weight: bold;
+                & > .wqe--prop {
+                    padding: $padding;
+                    &.wqe-for-name {
+                        flex: 1 1 5em;
+                    }
+                    &.wqe-for-value {
+                        text-align: right;
+                        flex: 1 1 7em;
+                        overflow: hidden;
+                        
+                        & span {
+                            display: inline-block;
+                            position: relative;
+                            height: 1.5em;
+                            max-height: 1.5em;
+                            & span {
+                                display: block;
+                                position: relative;
+                                &.wqe-is-run {
+                                    transition: transform 0.2s ease-in-out;
+                                }
+                                &.wqe-is-run.wqe-for-removed {
+                                    top: 0;
+                                    position: absolute;
+                                }
+                                &.wqe-is-created {
+                                    transform: translateY(-4em);
+                                    opacity: 1;
+                                }
+                                &.wqe-is-removed {
+                                    top: 0;
+                                    position: absolute;
+                                    transform: translateY(4em);
+                                }
+                            }
+                        }
+                    }
+                }
+                &.wqe-for-total > .wqe-for-value {
+                    font-size: $big-font-size;
+                    color: $primary-color;
+                }
+                &.wqe-for-subtotal span {
+                    transition-delay: 0.2s !important;
+                }
+                &.wqe-for-tax span {
+                    transition-delay: 0.28s !important;
+                }
+                &.wqe-for-total span {
+                    transition-delay: 0.36s !important;
+                }
+            }
+        }
+        @media screen and (max-width:$break-width) {
+            position: fixed !important;
+            top: 0 !important;
+            right: 0;
+            left: auto !important;
+            transition: transform 0.2s ease-in-out;
+            transform: translate(0, 0);
+            &:not(.wqe-is-spshown) {
+                transform: translate($monitor-width + $monitor-gap, 0);
+            }
+            & > .wqe--header > .wqe--menu > .wqe-for-hidemonitor {
+                display:block;
+            }
+        }
+    }
+    &.wqe-is-confirming {
+        width: 100%;
+        & > .wqe--header {display:none;}
+        & > .wqe--entries {
+            border: 1px solid $border-color;
+        }
+        & > .wqe--entries > .wqe--entry {
+            display: flex;
+            align-items: center;
+            background-color: $base-bgcolor;
+            flex-wrap: wrap;
+            /*width: 100%;*/
+            &.wqe-for-header {
+                border-bottom: 1px solid $border-color;
+            }
+            &:nth-child(even) {
+                background: $alt-bgcolor;
+            }
+            & > .wqe--prop {
+                padding: $padding;
+                box-sizing: border-box;
+            }
+            & > .wqe-for-no {
+                display: none;
+            }
+            /*& > .wqe-for-category {
+                font-size: $small-font-size;
+                color: rgba($base-color, $weak-alpha);
+                flex: 1 1 20%;
+            }*/
+            & > .wqe-for-entry {
+                flex: 0 1 48%;
+                max-width: 48%;  // for IE11
+                order: 1;
+            }
+            & > .wqe-for-unitPrice {
+                text-align: right;
+                font-size: $small-font-size;
+                color: rgba($base-color, $weak-alpha);
+                flex: 0 1 12.5%;
+                max-width: 12.5%;  // for IE11
+                order: 2;
+            }
+            & > .wqe-for-quantity {
+                text-align: right;
+                flex: 0 1 10%;
+                max-width: 10%;  // for IE11
+                order: 3;
+            }
+            & > .wqe-for-price {
+                text-align: right;
+                flex: 0 1 15%;
+                max-width: 15%;  // for IE11
+                order: 5;
+            }
+            & > .wqe-for-taxClass {
+                text-align: center;
+                font-size: $nano-font-size;
+                flex: 0 1 12%;
+                max-width: 12%;  // for IE11
+                order: 4;
+            }
+            & > .wqe-for-operation {display: none;}
+            &.wqe-for-header > .wqe-for-taxClass {
+                font-size: inherit;
+            }
+            &.wqe-is-run {
+                transition: max-height 0.2s linear, opacity 0.2s linear;
+                max-height: 100px;
+                overflow: hidden;
+            }
+            &.wqe-is-created, &.wqe-is-removed {
+                max-height: 0;
+                opacity: 0;
+            }
+        }
+        & > .wqe--footer {
+            //margin-left: auto;
+            align-self: flex-end;
+            width: 17em;
+            max-width: 100%;
+            & > .wqe--entry {
+                border: 1px solid $border-color;
+                display: flex;
+                align-items: center;
+                font-weight: bold;
+                background-color: $base-bgcolor;
+                & > .wqe--prop {
+                    padding: $padding;
+                    &.wqe-for-name {
+                        flex: 1 1 6em;
+                    }
+                    &.wqe-for-value {
+                        text-align: right;
+                        flex: 1 1 6em;
+                        overflow: hidden;
+                        
+                        & span {
+                            display: inline-block;
+                            position: relative;
+                            height: 1.5em;
+                            max-height: 1.5em;
+                            & span {
+                                display: block;
+                                position: relative;
+                                &.wqe-is-run {
+                                    transition: transform 0.2s ease-in-out;
+                                }
+                                &.wqe-is-run.wqe-for-removed {
+                                    top: 0;
+                                    position: absolute;
+                                }
+                                &.wqe-is-created {
+                                    transform: translateY(-4em);
+                                    opacity: 1;
+                                }
+                                &.wqe-is-removed {
+                                    top: 0;
+                                    position: absolute;
+                                    transform: translateY(4em);
+                                }
+                            }
+                        }
+                    }
+                }
+                &.wqe-for-total > .wqe-for-value {
+                    font-size: $big-font-size;
+                    color: $primary-color;
+                }
+            }
+        }
+        @media screen and (max-width:$break-width) {
+            & > .wqe--entries > .wqe--entry {
+                flex-wrap: wrap;
+                &.wqe-for-header {
+                    font-size: $small-font-size;
+                    & > .wqe-for-unitPrice, 
+                    & > .wqe-for-quantity, 
+                    & > .wqe-for-taxClass {
+                        display: none;
+                    }
+                }
+                & > .wqe-for-entry {
+                    flex-grow: 1;
+                    flex-shrink: 1;
+                    flex-basis: 70%;
+                    max-width: 70%;
+                    order: 1;
+                    padding-bottom: 0;
+                }
+                & > .wqe-for-price {
+                    flex-grow: 0;
+                    flex-shrink: 0;
+                    flex-basis: 30%;
+                    max-width: 30%;
+                    order: 2;
+                    padding-bottom: 0;
+                }
+                & > .wqe-for-unitPrice {
+                    padding-top: 0;
+                    padding-bottom: 0;
+                    font-size: $nano-font-size;
+                    flex-grow: 0;
+                    flex-shrink: 0;
+                    flex-basis: 30%;
+                    max-width: 30%;
+                    text-align: left;
+                    order: 103;
+                }
+                & > .wqe-for-quantity {
+                    padding-top: 0;
+                    padding-bottom: 0;
+                    font-size: $nano-font-size;
+                    flex-grow: 0;
+                    flex-shrink: 0;
+                    flex-basis: 15%;
+                    max-width: 15%;
+                    text-align: left;
+                    order: 104;
+                    &::before {
+                        display: inline;
+                        content: "x ";
+                    }
+                }
+                & > .wqe-for-taxClass {
+                    padding-top: 0;
+                    padding-bottom: 0;
+                    font-size: $nano-font-size;
+                    flex-grow: 0;
+                    flex-shrink: 0;
+                    flex-basis: 55%;
+                    max-width: 55%;
+                    text-align: left;
+                    order: 105;
+                }
+            }
+        }
+    }
+}
+
+.wqe-Form .wqe-Control {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    font-size: $font-size;
+    line-height: $line-height;
+    color: $base-color;
+    @if $table-layout {
+        &:not(.wqe-for-action) {
+            border-bottom: 1px solid $border-color;
+            &:first-child {
+                border-top: 1px solid $border-color;
+            }
+            & > .wqe--header {
+                background: $alt-bgcolor;
+            }
+        }
+    }
+    & > .wqe--header {
+        flex: 0 0 auto;
+        width: $control-header-width;
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        padding: cpd(-1) 0;
+        box-sizing: border-box;
+        @if $table-layout {
+            padding: (cpd(-1) + $font-size) $narrow-padding;
+            align-self: stretch;
+        }
+        & > .wqe--label {
+            flex: 0 1 auto;
+            font-size: $small-font-size;
+            line-height: $font-size * $line-height;
+            font-weight: bold;
+            @if $flip-required {
+                order: 2;
+            }
+        }
+        & > .wqe--required {
+            flex: 0 0 auto;
+            font-size: $small-font-size;
+            line-height: $font-size * $line-height;
+            font-weight: normal;
+            @if $fill-required {
+                background: $primary-bgcolor;
+                color: rgba($base-color, $weak-alpha);
+                border-radius: $box-radius;
+                border: none;
+                padding: 0 ($font-size * 0.25);
+            } @else {
+                color: $primary-color;
+            }
+            &.wqe-is-optional {
+                @if $show-optional {
+                    @if $fill-required {
+                        background: $button-bgcolor;
+                    } @else {
+                        color: rgba($base-color, $weak-alpha);
+                    }
+                } @else {
+                    display: none;
+                }
+            }
+        }
+        &.wqe-content-empty > .wqe--required {
+            display: none;
+        }
+        & > *:not(:last-child) {
+            @if $flip-required {
+                margin-left: $narrow-padding;
+            } @else {
+                margin-right: $narrow-padding;
+            }
+        }
+    }
+    & > .wqe--body {
+        flex: 1 1 auto;
+        position: relative;
+        @if $table-layout {
+            padding: $font-size;
+        }
+        & > *:not(:first-child) {
+            margin-top: $font-size * 0.25;
+        }
+        & .wqe--note {
+            display: block;
+            font-size: $small-font-size;
+            opacity: $weak-alpha;
+            margin-top: 4px;
+            margin-left: 4px;
+        }
+        & > .wqe--message {
+            @extend %Message;
+            left: $font-size;
+            top: - $small-font-size - 4px;  // 14 + 4
+            position: absolute;
+            @if $table-layout {
+                top: 1px;
+            }
+        }
+    }
+    &.wqe-is-run.wqe-for-removed {
+        display: none;  // suppress lifecycle transition
+    }
+}
+@media screen and (max-width:$break-width) {
+    .wqe-Form .wqe-Control {
+        flex-direction: column;
+        & > .wqe--header {
+            width: 100%;
+            padding: 0;
+            @if $table-layout {
+                padding: 8px 4px;
+            } @else {
+                margin-bottom: $outline-width;
+            }
+        }
+        & > .wqe--header.wqe-content-empty {
+            display: none;
+        }
+        & > .wqe--body {
+            width: 100%;
+            @if $table-layout {
+                padding: 16px 0;
+            }
+        }
+        & > .wqe--body .wqe--message {
+            left: auto;
+            right: 4px;
+            @if $table-layout {
+                top: -4px;
+            }
+        }
+    }
+}
+
+.wqe-Form .wqe-TextInput {
+    @extend %TextInput;
+    &.wqe-size-full {width: 100%;}
+    &.wqe-size-nano {width:calc(3em + 16px);}
+    &.wqe-size-mini {width:calc(5em + 16px);}
+    &.wqe-size-small {width:calc(8em + 16px);}
+    &.wqe-size-normal {width:calc(13em + 16px);}
+}
+
+.wqe-Form .wqe-TextArea {
+    @extend %TextInput;
+    height: 160px;  // 16px * 1.5 * 6 + 16px;
+    width: 100%;
+    &.wqe-size-full {height: 256px;}  // 16px * 1.5 * 10 + 16px
+    &.wqe-size-normal {height: 160px; }  // 16px * 1.5 * 6 + 16px
+    &.wqe-size-small {height: 112px; }  // 16px * 1.5 * 4 + 16px
+    &.wqe-size-mini {height: 88px; }  // 16px * 1.5 * 3 + 16px
+    &.wqe-size-nano {height: 64px; }  // 16px * 1.5 * 2 + 16px
+}
+
+.wqe-Form .wqe-InputGroup {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    &.wqe-gutter-small > *:not(:last-child) {
+        margin-right: 8px;
+    }
+    &.wqe-gutter-mini > *:not(:last-child) {
+        margin-right: 4px;
+    }
+}
+
+.wqe-Form .wqe-Checkbox {
+    @extend %Checkable;
+    @if $plain-components {
+        position: relative;
+        & > label::before {
+            width: $font-size * $line-height;
+            height: $font-size * $line-height;
+            display: inline-block;
+            border: 1px solid $border-color;
+            content: "";
+            margin-right: 0.25 * $font-size;
+            border-radius: $box-radius;
+            vertical-align: top;
+            position: relative;
+            top: ($control-height - $font-size * $line-height) / 2;
+            box-sizing: border-box;
+        }
+        & > label::after {
+            position: absolute;
+            text-align: center;
+            width: $font-size * $line-height;
+            height: $control-height;
+            line-height: $control-height;
+            left: 0;
+            top: 0;
+            content: "\f147";
+            font-family:"dashicons";
+            display: inline-block;
+            font-size: $font-size * $line-height;
+            vertical-align: middle;
+            color: transparent;
+            @if $disable-selection-anim {
+                transition: color 0.2s linear;
+            }
+        }
+        & > input:checked + label::after {
+            color: $primary-color;
+            @if $disable-selection-anim == false {
+                animation: spin2 0.3s;
+            }
+            transform: scale(1.2);
+        }
+    } @else {
+        & > label::before {
+            content: "\f147";
+            font-family:"dashicons";
+            color: $placeholder-color;
+            line-height: $font-size * $line-height;
+            display: inline-block;
+            font-size: $font-size * $line-height;
+            vertical-align: -25%;
+        }
+        & > input:checked + label::before {
+            color: $primary-color;
+            @if $disable-selection-anim == false {
+                animation: spin2 0.3s;
+            }
+            transform: scale(1.2);
+        }
+    }
+}
+@keyframes spin2 {
+    0% {transform:rotate(0) scale(1); }
+    60% {transform:rotate(375deg) scale(1.2); }
+    70% {transform:rotate(348deg) scale(1.2); }
+    80% {transform:rotate(368deg) scale(1.2); }
+    90% {transform:rotate(354deg) scale(1.2); }
+    100% {transform:rotate(360deg) scale(1.2); }
+}
+
+.wqe-Form .wqe-Radio {
+    @extend %Checkable;
+    @if $plain-components {
+        position: relative;
+        & > label::before {
+            width: $font-size * $line-height;
+            height: $font-size * $line-height;
+            display: inline-block;
+            border: 1px solid $border-color;
+            content: "";
+            margin-right: 0.25 * $font-size;
+            border-radius: 100px;
+            vertical-align: top;
+            position: relative;
+            top: ($control-height - $font-size * $line-height) / 2;
+            box-sizing: border-box;
+        }
+        & > label::after {
+            position: absolute;
+            text-align: center;
+            width: $font-size * 0.8;
+            height: $font-size * 0.8;
+            left: ($font-size * $line-height - $font-size * 0.8) * 0.5;
+            top: ($control-height - $font-size * 0.8) * 0.5;
+            content: "";
+            border-radius: 100px;
+            display: inline-block;
+            vertical-align: middle;
+            background-color: transparent;
+            @if $disable-selection-anim {
+                transition: background-color 0.2s linear;
+            }
+        }
+        & > input:checked + label::after {
+            background-color: $primary-color;
+            @if $disable-selection-anim == false {
+                animation: jump 0.3s;
+            }
+        }
+    } @else {
+        & > label::before {
+            content: "";
+            background: $placeholder-color;
+            display: inline-block;
+            height: $font-size * 0.8;
+            width: $font-size * 0.8;
+            border-radius: 100px;
+            vertical-align: 0;
+            margin-right: 4px;
+        }
+        & > input:checked + label::before {
+            background: $primary-color;
+            @if $disable-selection-anim == false {
+                animation: jump 0.3s;
+            }
+            transform: scale(1.2);
+        }
+    }
+}
+@if $plain-components {
+    @keyframes jump {
+        0% {transform:translateY(0) ; animation-timing-function: ease-out; }
+        30% {transform:translateY(-8px); animation-timing-function: ease-in; }
+        60% {transform:translateY(0); animation-timing-function: ease-out; }
+        75% {transform:translateY(-4px); animation-timing-function: ease-in; }
+        90% {transform:translateY(0); animation-timing-function: ease-out; }
+        95% {transform:translateY(-2px); animation-timing-function: ease-in; }
+        100% {transform:translateY(0); animation-timing-function: ease-in; }
+    }
+} @else {
+    @keyframes jump {
+        0% {transform:translateY(0) scale(1); animation-timing-function: ease-out; }
+        30% {transform:translateY(-8px) scale(1.1); animation-timing-function: ease-in; }
+        60% {transform:translateY(0) scale(1.2); animation-timing-function: ease-out; }
+        75% {transform:translateY(-4px) scale(1.2); animation-timing-function: ease-in; }
+        90% {transform:translateY(0) scale(1.2); animation-timing-function: ease-out; }
+        95% {transform:translateY(-2px) scale(1.2); animation-timing-function: ease-in; }
+        100% {transform:translateY(0) scale(1.2); animation-timing-function: ease-in; }
+    }
+}
+
+
+.wqe-Form .wqe-Select {
+    display: inline-block;
+    box-sizing: border-box;
+    position: relative;
+    margin: 0;
+    width: auto;
+    & > .wqe--input {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        display: block;
+        box-sizing: border-box;
+        font-size: $font-size;
+        color: $base-color;
+        line-height: $line-height;
+        padding: cpd(1) cpd(1) + (1.25 * $font-size) cpd(1) cpd(1);
+        border: 1px solid $border-color;
+        border-radius: $box-radius;
+        margin: 0;
+        outline: none;
+        height: auto;
+        background: $base-bgcolor;
+        transition: box-shadow 0.1s linear, border-color 0.1s linear;
+        &:hover {
+            @media screen and (min-width:$break-width + 1) {
+                box-shadow: 0 0 0 $outline-width rgba($primary-color, $hover-alpha);
+                z-index: 2;
+            }
+        }
+        &:focus {
+            box-shadow: 0 0 0 $outline-width rgba($primary-color, $focus-alpha);
+            border: 1px solid $border-color;
+            outline: none;
+            @if $disable-focus-anim == false {
+                animation: explosion 0.6s;
+            }
+            z-index: 2;
+        }
+        &.wqe-is-invalid:not(:focus) {
+            border-color: $negative-color;
+        }
+        &:disabled {
+            opacity: $disabled-alpha;
+            pointer-events: none;
+        }
+    }
+    & > .wqe--input::-ms-expand {
+        display: none;
+    }
+    &::after {
+        display: block;
+        position: absolute;
+        right: 4px;
+        top: cpd(1);
+        content: "\f140";
+        font-family: "dashicons";
+        font-size: $font-size;
+        pointer-events: none;
+    }
+}
+
+.wqe-Form .wqe-Echo {
+    display: block;
+    box-sizing: border-box;
+    line-height: $line-height;
+    padding: cpd(0) 0;
+}
+
+.wqe-Form .wqe-Button {
+    @extend %Buttonlike;
+    &.wqe-type-primary {
+        background-color: $primary-button-bgcolor !important;
+        color: $base-bgcolor !important;
+        padding-left: 23px;
+        padding-right: 23px;
+        min-width: 180px;
+        &:hover {
+            @media screen and (min-width:$break-width + 1) {
+                background-color: $hover-primary-button-bgcolor !important;
+            }
+        }
+        &:focus {
+            background-color: $primary-button-bgcolor !important;
+        }
+        &:active {
+            background-color: $hover-primary-button-bgcolor !important;
+        }
+    }
+    &.wqe-for-back::before {
+        display: inline-block;
+        font-family:"dashicons";
+        vertical-align: top;
+        margin-right: $narrow-padding;
+        content: "\f341";
+    }
+    &.wqe-belongs-monitor {
+        padding-left: 0;
+        padding-right: 0;
+        width: $control-height;
+    }
+    &.wqe-belongs-monmenu {
+        padding-left: 0;
+        padding-right: 0;
+        width: $control-height;
+        border-color: transparent;
+        background-color: transparent;
+        box-shadow: none;
+    }
+    &.wqe-belongs-product.wqe-for-decr {
+        display: none;
+    }
+    &.wqe-belongs-product.wqe-for-incr {
+        position: absolute;
+        left: $narrow-padding;
+        top: $narrow-padding;
+        width: $picture-width;
+        height: $picture-height;
+        opacity: 0;
+        z-index:3;
+    }
+    &.wqe-belongs-navbar.wqe-for-showmonitor {
+        position: absolute;
+        left: -0.15 * $fab-size;
+        top: ($navbar-height - $fab-size) / 2;
+        box-sizing: border-box;
+        padding: 0;
+        max-width: none;
+        width: $fab-size;
+        height: $fab-size;
+        z-index: 110;
+        box-shadow: $shadow2;
+        border-radius: 200px;
+        text-align: center;
+        background-color: $primary-button-bgcolor !important;
+        color: $base-bgcolor !important;
+        //border-color: transparent;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow:hidden;
+        &:hover {
+            @media screen and (min-width:$break-width + 1) {
+                background-color: $hover-primary-button-bgcolor !important;
+            }
+        }
+        &:focus {
+            background-color: $primary-button-bgcolor !important;
+        }
+        &:active {
+            background-color: $hover-primary-button-bgcolor !important;
+        }
+        &::before {
+            content: "\f174";
+            font-family: dashicons;
+            display: block;
+            line-height: 1;
+            font-weight: 400;
+            font-style: normal;
+            speak: none;
+            text-decoration: inherit;
+            text-transform: none;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            width: 28px;
+            height: 28px;
+            font-size: 28px;
+            vertical-align: top;
+            text-align: center;
+            transition: color .1s ease-in;
+            pointer-events: none;
+        }
+        & > span {
+            position: relative;
+            font-size: 10px;
+            pointer-events: none;
+            height: 16px;
+            line-height: 16px;
+            & > span {
+                display: block;
+                &.wqe-is-run {
+                    transition: transform 0.2s ease-in-out;
+                    transition-delay: 0.05s;
+                }
+                &.wqe-is-run.wqe-for-removed {
+                    top: 0;
+                    position: absolute;
+                }
+                &.wqe-is-created {
+                    transform: translateY(-8em);
+                    opacity: 1;
+                }
+                &.wqe-is-removed {
+                    top: 0;
+                    position: absolute;
+                    transform: translateY(8em);
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width:$break-width) {
+    .wqe-Form .wqe-Button.wqe-type-primary {
+        width: 100%;
+    }
+}
+
+.wqe-Form .wqe-HNavigator {
+    padding-top: 80px;
+    position: relative;
+    & > .wqe--items {
+        & > *:not(:last-child) {
+            margin-bottom: 20px;
+        }
+    }
+}
+
+.wqe-Form .wqe-Attributes {
+    & > *:not(:last-child) {
+        @if $table-layout == false {
+            margin-bottom: 32px;
+        }
+    }
+}
+
+.wqe-Form {
+    //background-color: $base-bgcolor;
+    color: $base-color;
+    padding: $form-padding;
+    position: relative;
+    font-family: sans-serif;
+    max-width: $max-form-width;
+    & > .wqe--lead {
+        & > .wqe--leadText {
+            margin: 0;
+            font-size: $font-size;
+            line-height: $line-height;
+        }
+    }
+    & > *:not(:last-child) {
+        margin-bottom: 32px;
+    }
+}

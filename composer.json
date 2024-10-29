@@ -1,0 +1,18 @@
+{
+    "type": "project",
+    "name": "vividcolors/aforms-eats", 
+    "description": "Simple order form for restaurants", 
+    "license": "MIT", 
+    "require": {
+        "tyam/bamboo": "*",
+        "justinrainbow/json-schema": "^5.2",
+        "aura/di": "3.*", 
+        "aura/payload": "*",
+        "leonelquinteros/php-toml": "^1.1"
+    }, 
+    "autoload": {
+        "psr-4": {
+            "AFormsEats\\":"src"
+        }
+    }
+}
